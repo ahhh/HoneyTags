@@ -2,6 +2,11 @@
 	<h1>New Honey Tag</h1>
 	<form method="POST" class="post-form">{% csrf_token %}
 		{{ form.as_p }}
+		Type: <select id='type' name='type'>
+			<option value="html">HTML</option>
+			<option value="php">PHP</option>
+			<option value="other">Other</option>
+		</select></br></br>
 		<button type="submit" class="submit_button">Submit</button>
 	</form>
 {% endblock %}

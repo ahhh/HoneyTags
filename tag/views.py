@@ -56,17 +56,16 @@ def regTag(request):
 		time =  datetime.now()		
 		tag = Tag(campaign=campaign, title=title, key=key, type=tag_type, pub_date=time)
 		tag.save()
+		src_ip = urllib2.urlopen("http://icanhazip.com").read()
+		src_ip = ''.join(src_ip.split())
+		src_port = request.META['SERVER_PORT']
 		if tag_type == "html":
-			src_ip = urllib2.urlopen("http://icanhazip.com").read()
-			src_ip = ''.join(src_ip.split())
-			html_payload = "&ltimg src='http://{0}/s?a={1}'&gt".format(src_ip, key)
+			html_payload = "&ltimg src='http://{0}:{1}/s?a={2}'&gt".format(src_ip, src_port, key)
 			return HttpResponse("Use this for your html payload: {}".format(html_payload))
 		elif tag_type == "php":
-			src_ip = urllib2.urlopen("http://icanhazip.com").read()
-			src_ip = ''.join(src_ip.split())
-			php_payload = "$r = new HttpRequest('http://{0}/s?a={1}', HttpRequest::METH_GET); $r->send();".format(src_ip, key)
+			php_payload = "$r = new HttpRequest('http://{0}:{1}/s?a={2}', HttpRequest::METH_GET); $r->send();".format(src_ip, src_port, key)
 			return HttpResponse("Use this for your php payload: {}".format(php_payload))
-		else: return HttpResponse("Tag added, please construct a callback using {}".format(key))
+		else: return HttpResponse("Tag added, please construct a callback to this server using the key: {}".format(key))
 	else:
 		if request.GET.get('pwd','') == HARDCODED_PASS:
 			form = regTagForm()
