@@ -61,6 +61,11 @@ def regTag(request):
 			src_ip = ''.join(src_ip.split())
 			html_payload = "&ltimg src='http://{0}/s?a={1}'&gt".format(src_ip, key)
 			return HttpResponse("Use this for your html payload: {}".format(html_payload))
+		elif tag_type == "php":
+			src_ip = urllib2.urlopen("http://icanhazip.com").read()
+			src_ip = ''.join(src_ip.split())
+			php_payload = "$r = new HttpRequest('http://{0}/s?a={1}', HttpRequest::METH_GET); $r->send();".format(src_ip, key)
+			return HttpResponse("Use this for your php payload: {}".format(php_payload))
 		else: return HttpResponse("Tag added, please construct a callback using {}".format(key))
 	else:
 		if request.GET.get('pwd','') == HARDCODED_PASS:
