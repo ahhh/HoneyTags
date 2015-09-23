@@ -25,7 +25,7 @@ def callback(request):
 			aip = request.META.get('REMOTE_ADDR')
 			try:
 				auser_agent = request.META['HTTP_USER_AGENT']
-			expect:
+			except:
 				auser_agent = "No user agent"
 			#return HttpResponse("{0}, {1}, {2}".format(atime, aip, auser_agent))
 			call = Callbacks(tag=atag, date=atime, ip=aip, ua=auser_agent)
@@ -66,7 +66,7 @@ def regTag(request):
 			html_payload = "&ltimg src='http://{0}:{1}/s?a={2}'&gt".format(src_ip, src_port, key)
 			return HttpResponse("Use this for your html payload: {}".format(html_payload))
 		elif tag_type == "php":
-			php_payload = "$r = new HttpRequest('http://{0}:{1}/s?a={2}', HttpRequest::METH_GET); $r->send();".format(src_ip, src_port, key)
+			php_payload = "$call = stream_context_create(array('http' => array('timeout' => 1))); file_get_contents('http://{0}:{1}/s?a={2}', 0, $call);".format(src_ip, src_port, key)
 			return HttpResponse("Use this for your php payload: {}".format(php_payload))
 		else: return HttpResponse("Tag added, please construct a callback to this server using the key: {}".format(key))
 	else:
@@ -74,4 +74,3 @@ def regTag(request):
 			form = regTagForm()
 			return HttpResponse(render(request, 'tag/regTagForm.html', {'form':form}))
 		else: return index(request)
-		
