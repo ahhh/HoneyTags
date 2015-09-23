@@ -23,7 +23,10 @@ def callback(request):
 			#return HttpResponse("{}".format(tag.title))
 			atime = datetime.now()
 			aip = request.META.get('REMOTE_ADDR')
-			auser_agent = request.META['HTTP_USER_AGENT']
+			try:
+				auser_agent = request.META['HTTP_USER_AGENT']
+			expect:
+				auser_agent = "No user agent"
 			#return HttpResponse("{0}, {1}, {2}".format(atime, aip, auser_agent))
 			call = Callbacks(tag=atag, date=atime, ip=aip, ua=auser_agent)
 			call.save()
@@ -72,6 +75,3 @@ def regTag(request):
 			return HttpResponse(render(request, 'tag/regTagForm.html', {'form':form}))
 		else: return index(request)
 		
-
-
-
