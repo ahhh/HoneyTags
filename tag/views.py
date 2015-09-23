@@ -45,7 +45,7 @@ def dump(request):
 	if request.GET.get('pwd','') == HARDCODED_PASS:
 		response = []
 		for event in Callbacks.objects.all():
-			log = "Item: {0}, phoned home at: {1}, from {2}, with the user_agent: {3} <br>".format(event.tag.title, event.date, event.ip, event.ua)
+			log = "Group: {4}, Item: {0}, Phoned home at: {1}, From IP: {2}, With the user_agent: {3} <br>".format(event.tag.title, event.date, event.ip, event.ua, event.tag.campaign)
 			response.append(log)
 		return HttpResponse(response)
 	else: return index(request)
